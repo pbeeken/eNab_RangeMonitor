@@ -30,10 +30,14 @@ void loop() {
 
   // TODO: Operate asynchronously using old tricks
   if (distToObs < trigDist) {
+    analogWrite(DD5, 125);
     digitalWrite(LED_BUILTIN, HIGH);
     delay(20);
     digitalWrite(LED_BUILTIN, LOW);
     delay(20);
+  } 
+  else {
+    analogWrite(DD5, 0);
   }
 
 

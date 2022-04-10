@@ -13,4 +13,9 @@ Quick and dirty circuit layout with visual feedback (using built-in LED)
 Showing the activation of feedback based on pot setting.
 
 ## First impressions
+> 04/10/2022
 The HC-SR04 lives up to its reputation as detecting things up to about 4m away and down to 6cm without a hitch.  I compared the distance to value set by a 100k pot and was able flash the built-in led whenever I was inside the threshhold. The angular range is about a 25 deg cone (empirically) which is close to the 15 deg (either side from center) value reported on the spec sheets.
+
+> 04/10/2022
+Added Piezo alarm to warn of proximity.  Seems to work well but may require amplification.
+
