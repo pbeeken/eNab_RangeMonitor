@@ -1,12 +1,17 @@
 #include <Arduino.h>
+// This code runs on a full scale Arduino with a serial connection
 #include <Streaming.h>
 
 const int trigPin = 3;
 const int echoPin = 2;
 
+#define CONTINUOUS 5
+#define INTERMITANT 3
+#define OFF 0
+
 int rangeDetect();
 int limitTrigger();
-
+void activateBuzzer(int val);
 
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
@@ -15,33 +20,47 @@ void setup() {
   pinMode(trigPin, OUTPUT); // Sets the trigPin as an OUTPUT
   pinMode(echoPin, INPUT); // Sets the echoPin as an INPUT
 
-
   Serial.begin(115200);
   
-  // put your setup code here, to run once:
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
 
   int trigDist = limitTrigger();
   int distToObs = rangeDetect();
   Serial << "Voltage (" << trigDist << ") - (" << distToObs << ")" << endl;
 
-  // TODO: Operate asynchronously using old tricks
+  // TODO: Explore prewarnings (repeated beeps vs continuous tones)
   if (distToObs < trigDist) {
-    analogWrite(DD5, 125);
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(20);
-    digitalWrite(LED_BUILTIN, LOW);
-    delay(20);
-  } 
-  else {
-    analogWrite(DD5, 0);
+    activateBuzzer(CONTINUOUS);
   }
+  else if (distToObs < trigDist*1.15) {
+    activateBuzzer(INTERMITANT);
+  }
+  else {
+    activateBuzzer(OFF);
+  }
+  delay(30);
+}
 
-
-  delay(50);
+/**
+ * activateBuzzer turns on the buzzer. On the UNO this is a hardware value so
+ * it doesn't need updating, for the ATTiny, I'll have to look.
+ **/
+void activateBuzzer(int val) {
+  switch(val) {
+    case CONTINUOUS:
+      analogWrite(DD5, 125); 
+      break;
+    case INTERMITANT:
+      analogWrite(DD5, 125);
+      delay(30);
+      analogWrite(DD5, 0);
+      break;
+    default:
+      analogWrite(DD5, 0);
+      break;
+  }
 }
 
 /**
