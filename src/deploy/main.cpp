@@ -1,26 +1,40 @@
 #include <Arduino.h>
 // This code runs on an attiny with no serial connection
 
-const int trigPin = 3;
-const int echoPin = 2;
+// Pins
+const int LEDPIN      = PB0;
+const int EchoPIN     = PB3;
+const int TriggerPIN  = PB1;
+const int LimitPIN    = PB4;
+const int AlertPIN    = PB2;
 
-#define CONTINUOUS 5
-#define INTERMITANT 3
-#define OFF 0
+// States
+const int OFF         = 0;
+const int CONTINUOUS  = 3;
+const int INTERMITANT = 5;
 
 int rangeDetect();
 int limitTrigger();
 void activateBuzzer(int val);
 
+/**
+ * setup prior to loop, initialization 
+ **/
 void setup() {
-  pinMode(LED_BUILTIN, OUTPUT);
-  pinMode(A0, INPUT);
+  pinMode(LEDPIN, OUTPUT);
+  digitalWrite(LEDPIN, LOW);
 
-  pinMode(trigPin, OUTPUT); // Sets the trigPin as an OUTPUT
-  pinMode(echoPin, INPUT); // Sets the echoPin as an INPUT
-  
+  pinMode(LimitPIN, INPUT);    // Pin for reading limit
+  pinMode(TriggerPIN, OUTPUT); // Sets the trigPin as an OUTPUT
+  pinMode(EchoPIN, INPUT);  // Sets the EchoPIN as an INPUT
+  pinMode(AlertPIN, OUTPUT);
+
 }
 
+bool loopCtr = true; 
+/**
+ * continuous loop, inner part of for(;;) loop 
+ **/
 void loop() {
 
   int trigDist = limitTrigger();
@@ -29,12 +43,14 @@ void loop() {
   // TODO: Explore prewarnings (repeated beeps vs continuous tones)
   if (distToObs < trigDist) {
     activateBuzzer(CONTINUOUS);
+    digitalWrite(LEDPIN, HIGH);
   }
   else if (distToObs < trigDist*1.2) {
     activateBuzzer(INTERMITANT);
   }
   else {
     activateBuzzer(OFF);
+    digitalWrite(LEDPIN, LOW);
   }
   delay(30);
 }
@@ -46,15 +62,15 @@ void loop() {
 void activateBuzzer(int val) {
   switch(val) {
     case CONTINUOUS:
-      analogWrite(DD5, 125); 
+      analogWrite(AlertPIN, 125); 
       break;
     case INTERMITANT:
-      analogWrite(DD5, 125);
+      analogWrite(AlertPIN, 125);
       delay(30);
-      analogWrite(DD5, 0);
+      analogWrite(AlertPIN, 0);
       break;
     default:
-      analogWrite(DD5, 0);
+      analogWrite(AlertPIN, 0);
       break;
   }
  
@@ -66,7 +82,7 @@ void activateBuzzer(int val) {
  * @returns distance in cm
  **/
 int limitTrigger() {
-  int reading = analogRead(A0);
+  int reading = analogRead(LimitPIN);
   // Convert from the max range on an analog input to the value corresponding to a distance away in cm  
   return map(reading, 0L, 1024L, 0L, 400L);
 }
@@ -77,14 +93,14 @@ int limitTrigger() {
  **/
 int rangeDetect() {
   // Clears the trigPin condition
-  digitalWrite(trigPin, LOW);
+  digitalWrite(TriggerPIN, LOW);
   delayMicroseconds(2);
   // Sets the trigPin HIGH (ACTIVE) for 10 microseconds
-  digitalWrite(trigPin, HIGH);
+  digitalWrite(TriggerPIN, HIGH);
   delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
-  // Reads the echoPin, returns the sound wave travel time in microseconds
-  uint32_t duration = pulseIn(echoPin, HIGH);
+  digitalWrite(TriggerPIN, LOW);
+  // Reads the EchoPIN, returns the sound wave travel time in microseconds
+  uint32_t duration = pulseIn(EchoPIN, HIGH);
   // Calculating the distance
   int distance = duration * 0.034 / 2; // Speed of sound wave divided by 2 (go and back)
   // Displays the distance on the Serial Monitor
