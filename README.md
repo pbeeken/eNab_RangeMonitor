@@ -19,3 +19,11 @@ The HC-SR04 lives up to its reputation as detecting things up to about 4m away a
 > 04/10/2022
 Added Piezo alarm to warn of proximity.  Seems to work well but may require amplification.
 
+> 05/15/2022
+Getting the hardware to play nice with the ATTiny85 was a bit tricky having to do with setting the proper clock speed and handling the timing of the incoming and outgoing signals (who new delaymicroseconds was so twitchy?)  Finally got the software to do as I wanted with the sonic alert and variable distance. 
+
+![picture of final prototype](WorkingPrototype.jpg)
+
+*Yeah, I know this wont show*
+![movie of prototype](WorkingAction.mp4)
+
