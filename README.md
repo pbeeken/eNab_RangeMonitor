@@ -32,7 +32,7 @@ Schools out and I can finally proof this thing. I have finally figured out the w
 ![top down picture](BreadBoardTop.jpg) 
 ![Front image](BreadBoardFront.jpg)
 
-The device consumes ~ 11mA while testing the surroundings and 41mA when whistling an immanent collision. The sound isn't loud but readily discernable for training purposes.
+The device consumes ~ 11mA while testing the surroundings and 41mA when whistling an immanent collision. The sound isn't loud but readily discernable for training purposes.  A set of 4 AA would last at least 60hrs if not more with normal use.  4 rechargable AAs would also work with this setup.  (device works down to about 4V)
 
 ![Action](BreadboardAction.mp4)
 
