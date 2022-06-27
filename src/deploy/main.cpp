@@ -47,7 +47,7 @@ bool loopCtr = true;
  * continuous loop, inner part of for(;;) loop 
  **/
 void loop() {
-
+    // digitalWrite(PB0, HIGH); // debugging
   int timeTrig = limitTrigger();
   uint32_t timeToObj = rangeDetect();
 
@@ -63,7 +63,10 @@ void loop() {
     activateBuzzer(OFF);
     //digitalWrite(LEDPIN, LOW);
   }
-  delay(20);
+  delay(10);
+    //   digitalWrite(PB0, LOW); // debugging
+    //   delay(10);
+
 }
 
 /**

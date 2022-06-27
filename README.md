@@ -27,3 +27,13 @@ Getting the hardware to play nice with the ATTiny85 was a bit tricky having to d
 *Yeah, I know this wont show*
 ![movie of prototype](WorkingAction.mp4)
 
+> 06/27/2022
+Schools out and I can finally proof this thing. I have finally figured out the wierd timing of the ATTiny. I have characterized the device as to current consumption and tested it with batteries.  The final breadboard is pretty compact I can probably package this into a box slightly larger than a AA 4 pack. 
+![top down picture](BreadBoardTop.jpg) 
+![Front image](BreadBoardFront.jpg)
+
+The device consumes ~ 11mA while testing the surroundings and 41mA when whistling an immanent collision. The sound isn't loud but readily discernable for training purposes.
+
+![Action](BreadboardAction.mp4)
+
+Off camera I am bringing the flat of my hand in and away from the sensor. The pot on top determines where the trigger point is and for this video it is set to about 40cm.
