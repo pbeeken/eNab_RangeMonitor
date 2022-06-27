@@ -23,7 +23,7 @@ const int OFF         = 0;
 const int CONTINUOUS  = 3;
 const int INTERMITANT = 5;
 
-int rangeDetect();
+uint32_t rangeDetect();
 int limitTrigger();
 void activateBuzzer(int val);
 
@@ -49,7 +49,7 @@ bool loopCtr = true;
 void loop() {
 
   int timeTrig = limitTrigger();
-  int timeToObj = rangeDetect();
+  uint32_t timeToObj = rangeDetect();
 
   // TODO: Explore prewarnings (repeated beeps vs continuous tones)
   if (timeToObj < timeTrig) {
@@ -106,8 +106,11 @@ int limitTrigger() {
 /**
  * rangeDetect determines the range from the sonic sensor to an obstruction
  * @returns the range in cm
+ * Ranging includes some glitching so we continuously do a running average.
  **/
-int rangeDetect() {
+uint32_t avgDist = 0L;
+
+uint32_t rangeDetect() {
   // Clears the trigPin condition
   digitalWrite(TriggerPIN, LOW);
   delayMicroseconds(2/TIME_FACTOR);
@@ -118,7 +121,7 @@ int rangeDetect() {
   // Reads the EchoPIN, returns the sound wave travel time in microseconds
   uint32_t duration = pulseInLong(EchoPIN, HIGH, 2*MAXDIST)*TIME_FACTOR;
   // Calculating the distance
-  int distance = duration / 2; // Keep to integer math 4m = 11764 us
+  uint32_t distance = duration / 2; // Keep to integer math 4m = 11764 us
   // Displays the distance on the Serial Monitor
   return distance;
 }
